@@ -13,12 +13,10 @@ body {
 }
 
 #cursor {
+    top: 50vh;
+    left: 50vw;
     position: absolute;
     object-fit: cover;
-    width: 10vh;
+    height: max(200vh, 115vw);
     pointer-events: none;
-}
-
-.test {
-    height: 200px;
 }
