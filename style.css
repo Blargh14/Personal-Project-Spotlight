@@ -1,5 +1,6 @@
 html {
     overflow: hidden;
+    cursor: none;
 }
 
 body {
@@ -19,4 +20,5 @@ body {
     object-fit: cover;
     height: max(200vh, 115vw);
     pointer-events: none;
+    z-index: 10;
 }
