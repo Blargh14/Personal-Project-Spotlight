@@ -16,4 +16,9 @@ body {
     position: absolute;
     object-fit: cover;
     width: 10vh;
+    pointer-events: none;
+}
+
+.test {
+    height: 200px;
 }
