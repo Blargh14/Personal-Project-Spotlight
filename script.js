@@ -2,9 +2,45 @@ const spotlight = document.querySelector("#cursor");
 const background = document.querySelector("#background");
 const deleteThis = document.querySelector("#delete");
 
-deleteThis.addEventListener("click", e => {
+let eventLinks = false;
+
+deleteThis.addEventListener("change", e => {
+    let externalHTMLLinks = e.currentTarget.files[0];
+    
+    // Mozilla error prevention code
+    if (!externalHTMLLinks) {
+        return;
+    }
+    if (!externalHTMLLinks.type.startsWith("text")) {
+        return;
+    }
+
+    let stopRemoval = false;
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+        eventLinks = reader.result;
+        eventLinks = JSON.parse(eventLinks);
+        eventLinks = eventLinks["list"];
+        console.log(eventLinks);
+    };
+
+    reader.onerror = () => {
+        console.log("Uhoh happened at reader.onerror");
+        stopRemoval = true;
+    }
+
+    reader.readAsText(externalHTMLLinks);
+
+    if (stopRemoval) {
+        return;
+    }
+    
     e.currentTarget.remove();
 });
+
+
 
 document.addEventListener("mousemove", e => {
     spotlight.style.left = (e.clientX - spotlight.width / 2) + "px";
