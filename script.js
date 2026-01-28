@@ -49,30 +49,11 @@ document.addEventListener("mousemove", e => {
     const tooSlow = [-2,-1,0,1,2]
 
     if (tooSlow.includes(e.clientY - lastY) && tooSlow.includes(e.clientX - lastX)) {
-        return;
+        return; // This will prevent the spotlight update too, change if you want it snappier later
     }
-
-    let pitch = e.clientY < lastY ? "upper" : "lower";
-    let yaw = e.clientX < lastX ? "left" : "right";
-
-    let direction = pitch + yaw;
-
+    
     lastX = e.clientX;
     lastY = e.clientY;
-
-    switch (direction) {
-        case "upperleft":
-            console.log(direction);
-            break;
-        case "upperright":
-            console.log(direction);
-            break;
-        case "lowerleft":
-            console.log(direction);
-            break;
-        case "lowerright":
-            console.log(direction);
-    }
 
     spotlight.style.left = (e.clientX - spotlight.width / 2) + "px";
     spotlight.style.top = (e.clientY - spotlight.height / 2) + "px";
@@ -99,10 +80,31 @@ function addSpotlightEvent() {
     reveal.style.position = "absolute";
     reveal.style.left = Math.random() * (window.innerWidth - 100) + "px";
     reveal.style.top = Math.random() * (window.innerHeight - 100) + "px";
-    background.appendChild(reveal)
+    background.appendChild(reveal);
 
     reveal.addEventListener("mouseout", (e) => {
         e.currentTarget.remove();
         active = false;
     });
+}
+
+function pointFind(x, y) {
+    let pitch = y < lastY ? "upper" : "lower";
+    let yaw = x < lastX ? "left" : "right";
+
+    let direction = pitch + yaw;
+
+    switch (direction) {
+        case "upperleft":
+            console.log(direction);
+            break;
+        case "upperright":
+            console.log(direction);
+            break;
+        case "lowerleft":
+            console.log(direction);
+            break;
+        case "lowerright":
+            console.log(direction);
+    }
 }
