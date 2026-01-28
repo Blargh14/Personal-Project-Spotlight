@@ -14,8 +14,8 @@ body {
 }
 
 #cursor {
-    top: 50vh;
-    left: 50vw;
+    top: -50vh;
+    left: -50vw;
     position: absolute;
     object-fit: cover;
     height: max(200vh, 115vw);
