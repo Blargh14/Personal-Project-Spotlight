@@ -1,9 +1,6 @@
 const spotlight = document.querySelector("#cursor");
 const background = document.querySelector("#background");
 const deleteThis = document.querySelector("#delete");
-const testPoint = document.querySelector("#test");
-const testLight = document.querySelector("#test2");
-
 
 let eventLinks = false;
 
@@ -59,24 +56,8 @@ document.addEventListener("mousemove", e => {
         return; // This will prevent the spotlight update too, change if you want it snappier later
     }
 
-    let spotlightOffset = spotlight.height / 12;
-
-    testLight.style.width = spotlightOffset * 2 + "px";
-    testLight.style.height = testLight.style.width;
-
     spotlight.style.left = (e.clientX - spotlight.width / 2) + "px";
     spotlight.style.top = (e.clientY - spotlight.height / 2) + "px";
-
-    testLight.style.left = e.clientX - spotlightOffset + "px";
-    testLight.style.top = e.clientY - spotlightOffset + "px";
-
-    points = pointFind(e.clientX, e.clientY);
-
-    testPoint.style.width = spotlightOffset * 2 + "px";
-    testPoint.style.height = testLight.style.width;
-
-    testPoint.style.left = points.x + "px";
-    testPoint.style.top = points.y + "px";
 
     if (!active) {
         spawn = Math.floor(Math.random() * 10) === 9; // mousemove works faster in dev tools, something to keep in mind.

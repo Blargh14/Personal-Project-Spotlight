@@ -22,25 +22,3 @@ body {
     pointer-events: none;
     z-index: 10;
 }
-
-#test {
-    top: 5px;
-    left: 5px;
-    z-index: 11;
-    position: absolute;
-    border-style: solid;
-    border-color: white;
-    width: 100px;
-    height: 100px;
-}
-
-#test2 {
-    top: 10px;
-    left: 10px;
-    z-index: 12;
-    position: absolute;
-    border-style: solid;
-    border-color: red;
-    width: 100px;
-    height: 100px;
-}
