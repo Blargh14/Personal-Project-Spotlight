@@ -63,12 +63,13 @@ document.addEventListener("mousemove", e => {
 
         if (spawn) {
             active = true;
-            addSpotlightEvent();
+            let startPoint = pointFind(e.clientX, e.clientY);
+            addSpotlightEvent(startPoint);
         }
     }
 });
 
-function addSpotlightEvent() {
+function addSpotlightEvent(startPoint) {
     if (!eventLinks) {
         active = false;
         return;
@@ -88,15 +89,37 @@ function addSpotlightEvent() {
     });
 }
 
+// Returns an object with keys x,y that an event needs to be placed in based on movement angle.
+// Points to double relative smaller x or y and adds an offset to give the element space.
 function pointFind(x, y) {
     let pitch = y < lastY ? "upper" : "lower";
     let yaw = x < lastX ? "left" : "right";
+    let xOffset = Math.abs(x - lastX);
+    let yOffset = Math.abs(y - lastY);
+    let spotlightOffset = spotlight.height / 12; // About the radius of the view area.
+    let position = {x: 0, y: 0};
 
     let direction = pitch + yaw;
 
     switch (direction) {
         case "upperleft":
-            console.log(direction);
+            if (x === 0) {
+                position.x = x - spotlightOffset;
+                position.y = y - spotlightOffset * 3; // Size of the event will be same as the spotlight, so 3 * radius moves it out of the way and gives it space
+                return position;
+            } else if (y === 0) {
+                position.x = x - spotlightOffset * 3;
+                position.y = y - spotlightOffset;
+                return position;
+            } else if (x > y) {
+                position.x = x - spotlightOffset * 3;
+                position.y = y - (yOffset / xOffset * spotlightOffset * 2 + spotlightOffset); // Scale up the smaller distance based on the larger distance
+                return position;
+            } else {
+                position.x = x - spotlightOffset * 3; // Should be equal in this case, so max for both.
+                position.y = y - spotlightOffset * 3;
+                return position;
+            }
             break;
         case "upperright":
             console.log(direction);
