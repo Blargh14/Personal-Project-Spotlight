@@ -126,7 +126,27 @@ function pointFind(x, y) {
             }
             break;
         case "upperright":
-            console.log(direction);
+            if (x === 0) {
+                position.x = x - spotlightOffset;
+                position.y = y - spotlightOffset * 3;
+                return position;
+            } else if (y === 0) {
+                position.x = x + spotlightOffset;
+                position.y = y - spotlightOffset;
+                return position;
+            } else if (x > y) {
+                position.x = x + spotlightOffset;
+                position.y = y - (yOffset / xOffset * spotlightOffset * 2 + spotlightOffset);
+                return position;
+            } else if (x < y) {
+                position.x = x - spotlightOffset + (xOffset / yOffset * spotlightOffset * 2 + spotlightOffset);
+                position.y = y - spotlightOffset * 3;
+                return position;
+            } else {
+                position.x = x + spotlightOffset;
+                position.y = y - spotlightOffset * 3;
+                return position;
+            }
             break;
         case "lowerleft":
             console.log(direction);
