@@ -115,6 +115,10 @@ function pointFind(x, y) {
                 position.x = x - spotlightOffset * 3;
                 position.y = y - (yOffset / xOffset * spotlightOffset * 2 + spotlightOffset); // Scale up the smaller distance based on the larger distance
                 return position;
+            } else if (x < y) {
+                position.x = x - (xOffset / yOffset * spotlightOffset * 2 + spotlightOffset);
+                position.y = y - spotlightOffset * 3;
+                return position;
             } else {
                 position.x = x - spotlightOffset * 3; // Should be equal in this case, so max for both.
                 position.y = y - spotlightOffset * 3;
