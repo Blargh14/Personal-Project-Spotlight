@@ -46,9 +46,9 @@ let lastY = 0;
 
 document.addEventListener("mousemove", e => {
     // When going too slow mousemove will fire based on touched pixels messing with the math
-    const tooSlow = [-2,-1,0,1,2]
+    const tooSlow = 2
 
-    if (tooSlow.includes(e.clientY - lastY) && tooSlow.includes(e.clientX - lastX)) {
+    if (Math.abs(e.clientY - lastY) <= tooSlow && Math.abs(e.clientX - lastX) <= tooSlow) {
         return; // This will prevent the spotlight update too, change if you want it snappier later
     }
     
@@ -149,9 +149,45 @@ function pointFind(x, y) {
             }
             break;
         case "lowerleft":
-            console.log(direction);
+            if (x === 0) {
+                position.x = x - spotlightOffset;
+                position.y = y + spotlightOffset; 
+            } else if (y === 0) {
+                position.x = x - spotlightOffset * 3;
+                position.y = y - spotlightOffset;
+                return position;
+            } else if (x > y) {
+                position.x = x - spotlightOffset * 3;
+                position.y = y - spotlightOffset + (yOffset / xOffset * spotlightOffset * 2 + spotlightOffset);
+            } else if (x < y) {
+                position.x = x - (xOffset / yOffset * spotlightOffset * 2 + spotlightOffset);
+                position.y = y + spotlightOffset;
+                return position;
+            } else {
+                position.x = x - spotlightOffset * 3;
+                position.y = y + spotlightOffset;
+                return position;
+            }
             break;
         case "lowerright":
-            console.log(direction);
+            if (x === 0) {
+                position.x = x - spotlightOffset;
+                position.y = y + spotlightOffset; 
+            } else if (y === 0) {
+                position.x = x + spotlightOffset;
+                position.y = y - spotlightOffset;
+                return position;
+            } else if (x > y) {
+                position.x = x + spotlightOffset;
+                position.y = y - spotlightOffset + (yOffset / xOffset * spotlightOffset * 2);
+            } else if (x < y) {
+                position.x = x - spotlightOffset + (xOffset / yOffset * spotlightOffset * 2);
+                position.y = y + spotlightOffset;
+                return position;
+            } else {
+                position.x = x + spotlightOffset;
+                position.y = y + spotlightOffset;
+                return position;
+            }
     }
 }
