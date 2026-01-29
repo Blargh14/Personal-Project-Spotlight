@@ -43,11 +43,15 @@ deleteThis.addEventListener("change", e => {
 });
 
 let active = false;
-let lastX = 0;
-let lastY = 0;
+let lastX = false;
+let lastY = false;
 
 
 document.addEventListener("mousemove", e => {
+    if (lastX === false) {
+        lastX = e.clientX;
+        lastY = e.clientY;
+    }
     // When going too slow mousemove will fire based on touched pixels messing with the math
     const tooSlow = 2
 
@@ -59,15 +63,20 @@ document.addEventListener("mousemove", e => {
 
     testLight.style.width = spotlightOffset * 2 + "px";
     testLight.style.height = testLight.style.width;
-    
-    lastX = e.clientX;
-    lastY = e.clientY;
 
     spotlight.style.left = (e.clientX - spotlight.width / 2) + "px";
     spotlight.style.top = (e.clientY - spotlight.height / 2) + "px";
 
     testLight.style.left = e.clientX - spotlightOffset + "px";
     testLight.style.top = e.clientY - spotlightOffset + "px";
+
+    points = pointFind(e.clientX, e.clientY);
+
+    testPoint.style.width = spotlightOffset * 2 + "px";
+    testPoint.style.height = testLight.style.width;
+
+    testPoint.style.left = points.x + "px";
+    testPoint.style.top = points.y + "px";
 
     if (!active) {
         spawn = Math.floor(Math.random() * 10) === 9; // mousemove works faster in dev tools, something to keep in mind.
@@ -78,6 +87,9 @@ document.addEventListener("mousemove", e => {
             addSpotlightEvent(startPoint);
         }
     }
+
+    lastX = e.clientX;
+    lastY = e.clientY;
 });
 
 function addSpotlightEvent(startPoint) {
@@ -114,19 +126,19 @@ function pointFind(x, y) {
 
     switch (direction) {
         case "upperleft":
-            if (x === 0) {
+            if (xOffset === 0) {
                 position.x = x - spotlightOffset;
                 position.y = y - spotlightOffset * 3; // Size of the event will be same as the spotlight, so 3 * radius moves it out of the way and gives it space
                 return position;
-            } else if (y === 0) {
+            } else if (yOffset === 0) {
                 position.x = x - spotlightOffset * 3;
                 position.y = y - spotlightOffset;
                 return position;
-            } else if (x > y) {
+            } else if (xOffset > yOffset) {
                 position.x = x - spotlightOffset * 3;
                 position.y = y - (yOffset / xOffset * spotlightOffset * 2 + spotlightOffset); // Scale up the smaller distance based on the larger distance
                 return position;
-            } else if (x < y) {
+            } else if (xOffset < yOffset) {
                 position.x = x - (xOffset / yOffset * spotlightOffset * 2 + spotlightOffset);
                 position.y = y - spotlightOffset * 3;
                 return position;
@@ -137,19 +149,19 @@ function pointFind(x, y) {
             }
             break;
         case "upperright":
-            if (x === 0) {
+            if (xOffset === 0) {
                 position.x = x - spotlightOffset;
                 position.y = y - spotlightOffset * 3;
                 return position;
-            } else if (y === 0) {
+            } else if (yOffset === 0) {
                 position.x = x + spotlightOffset;
                 position.y = y - spotlightOffset;
                 return position;
-            } else if (x > y) {
+            } else if (xOffset > yOffset) {
                 position.x = x + spotlightOffset;
                 position.y = y - (yOffset / xOffset * spotlightOffset * 2 + spotlightOffset);
                 return position;
-            } else if (x < y) {
+            } else if (xOffset < yOffset) {
                 position.x = x - spotlightOffset + (xOffset / yOffset * spotlightOffset * 2 + spotlightOffset);
                 position.y = y - spotlightOffset * 3;
                 return position;
@@ -160,17 +172,19 @@ function pointFind(x, y) {
             }
             break;
         case "lowerleft":
-            if (x === 0) {
+            if (xOffset === 0) {
                 position.x = x - spotlightOffset;
                 position.y = y + spotlightOffset; 
-            } else if (y === 0) {
+                return position;
+            } else if (yOffset === 0) {
                 position.x = x - spotlightOffset * 3;
                 position.y = y - spotlightOffset;
                 return position;
-            } else if (x > y) {
+            } else if (xOffset > yOffset) {
                 position.x = x - spotlightOffset * 3;
                 position.y = y - spotlightOffset + (yOffset / xOffset * spotlightOffset * 2 + spotlightOffset);
-            } else if (x < y) {
+                return position;
+            } else if (xOffset < yOffset) {
                 position.x = x - (xOffset / yOffset * spotlightOffset * 2 + spotlightOffset);
                 position.y = y + spotlightOffset;
                 return position;
@@ -181,17 +195,19 @@ function pointFind(x, y) {
             }
             break;
         case "lowerright":
-            if (x === 0) {
+            if (xOffset === 0) {
                 position.x = x - spotlightOffset;
-                position.y = y + spotlightOffset; 
-            } else if (y === 0) {
+                position.y = y + spotlightOffset;
+                return position;
+            } else if (yOffset === 0) {
                 position.x = x + spotlightOffset;
                 position.y = y - spotlightOffset;
                 return position;
-            } else if (x > y) {
+            } else if (xOffset > yOffset) {
                 position.x = x + spotlightOffset;
                 position.y = y - spotlightOffset + (yOffset / xOffset * spotlightOffset * 2);
-            } else if (x < y) {
+                return position;
+            } else if (xOffset < yOffset) {
                 position.x = x - spotlightOffset + (xOffset / yOffset * spotlightOffset * 2);
                 position.y = y + spotlightOffset;
                 return position;
