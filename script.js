@@ -79,18 +79,55 @@ function addSpotlightEvent(startPoint) {
         return;
     }
 
-    let pick = Math.floor(Math.random() * eventLinks.length);
-    const reveal = document.createElement("img");
-    reveal.src = eventLinks[pick];
-    reveal.style.position = "absolute";
-    reveal.style.left = Math.random() * (window.innerWidth - 100) + "px";
-    reveal.style.top = Math.random() * (window.innerHeight - 100) + "px";
-    background.appendChild(reveal);
+    let spotlightOffset = spotlight.height / 6; // About the diameter of the view area.
 
-    reveal.addEventListener("mouseout", (e) => {
+    // Event must fit in the viewport
+    if (startPoint.x < 0 || startPoint.y < 0 || startPoint.x + spotlightOffset > window.innerWidth || startPoint.y + spotlightOffset > window.innerHeight) {
+        active = false;
+        return;
+    }
+
+    const outerBounds = document.createElement("div");
+
+    const revealContainer = document.createElement("div");
+    revealContainer.style.position = "absolute";
+    revealContainer.style.left = startPoint.x + "px";
+    revealContainer.style.top = startPoint.y + "px";
+    revealContainer.style.width = spotlightOffset + "px";
+    revealContainer.style.height = spotlightOffset + "px";
+    background.appendChild(revealContainer);
+
+    let pick = Math.floor(Math.random() * eventLinks.length);
+    const reveal = makeElement(eventLinks[pick]);
+    
+    revealContainer.appendChild(reveal);
+
+    revealContainer.addEventListener("mouseout", (e) => {
         e.currentTarget.remove();
         active = false;
     });
+}
+
+function makeElement(link) {
+    if (/(jpg|gif|png|jpeg|webp|tiff|bmp)$/i.test(link)) {
+        element = document.createElement("img");
+        element.style.objectFit = "contain";
+    } else  {
+        element = document.createElement("iframe");
+    }
+    
+    element.style.width = "100%";
+    element.style.height = "100%";
+    element.src = link;
+    
+    if (link.includes("youtube.com")) {
+        element.src = link.replace("watch?v=", "embed/");
+        element.frameborder = "0";
+        element.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        element.referrerpolicy = "strict-origin-when-cross-origin";
+    }
+
+    return element;
 }
 
 // Returns an object with keys x,y that an event needs to be placed in based on movement angle.
